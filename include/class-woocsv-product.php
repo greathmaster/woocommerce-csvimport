@@ -390,7 +390,11 @@ class woocsv_import_product
 		global $woocsv_import;
 		
 		$imageID = false;
-		if ($this->is_valid_url($this->featured_image)) {
+		
+		if (intval($this->featured_image) > 0) {
+			$this->log[] = __('featured image is imported using the image post ID','woocsv');
+			$imageID = $this->featured_image;
+		} elseif ($this->is_valid_url($this->featured_image)) {
 			$this->log[] = __('featured image is imported using the URL','woocsv');
 			$imageID = $this->save_image_with_url($this->featured_image);
 		} else {
@@ -407,7 +411,10 @@ class woocsv_import_product
 		$images = explode('|', $this->product_gallery);
 		$gallery = false;
 		foreach ($images as $image) {
-			if ($this->is_valid_url($image)) {
+			
+			if (intval($image) > 0) {
+				$imageID = $image;
+			} elseif ($this->is_valid_url($image)) {
 				$imageID = $this->save_image_with_url($image);
 			} else {
 				$imageID = $this->save_image_with_name($image);
